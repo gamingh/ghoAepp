@@ -1,0 +1,6 @@
+<RCC>
+	<qresource prefix="/">
+		<file alias="qml/main.qml">src/qml/main.qml</file>
+<!-- 		<file alias="qtquickcontrols2.conf">misc/qtquickcontrols2.conf</file> -->
+	</qresource>
+</RCC>
