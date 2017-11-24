@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 	// QML-GUI
 	//
 
-	if (strlen(qgetenv("QT_QUICK_CONTROLS_STYLE")) == 0)
+	if (qgetenv("QT_QUICK_CONTROLS_STYLE").isEmpty())
 	{
 		qDebug() << "QT_QUICK_CONTROLS_STYLE not set, setting to Material";
 		qputenv("QT_QUICK_CONTROLS_STYLE", "Material");
