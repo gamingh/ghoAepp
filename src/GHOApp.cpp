@@ -25,16 +25,23 @@
 #include <QByteArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include <QAuthenticator>
+#include <QSettings>
 
 #include <iostream>
 
-static const QString CELLS_DATA_URL("http://gamerbudebb.d.pboehm.de/gho/vertretungsplan-cells.json");
+static const QString JSON_DATA_HTTP_URL("http://gamerbudebb.d.pboehm.de/gho/"
+					 "vertretungsplan-cells.json");
+static const QString JSON_DATA_HTTP_USERNAME("ghoschueler");
 
 GHOApp::GHOApp(QObject *parent) : QObject(parent)
 {
+	// load settings (<= ~/.config/ghoaepp/ghoaepp.conf)
+	QSettings settings(APPLICATION_NAME, APPLICATION_NAME);
+	password = settings.value("auth/password").toString();
 }
 
 GHOApp::~GHOApp()
@@ -43,22 +50,37 @@ GHOApp::~GHOApp()
 
 void GHOApp::downloadJson()
 {
-	QNetworkAccessManager *manager = new QNetworkAccessManager();
-	QUrl url(CELLS_DATA_URL);
-	QUrlQuery query;
+	QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
-	query.addQueryItem("username", "ghoschueler");
-	query.addQueryItem("password", ""); // I won't paste the password here :P
+	// when the manager finishes downloading, trigger `handleJsonData`
+	connect(manager, SIGNAL(finished(QNetworkReply*)),
+		this, SLOT(handleJsonData(QNetworkReply*)));
+	// when the manager requires authentication, trigger `handleAuthenticationRequired`
+	connect(manager, SIGNAL(authenticationRequired(QNetworkReply*, QAuthenticator*)),
+		this, SLOT(handleAuthenticationRequired(QNetworkReply*, QAuthenticator*)));
 
-	url.setQuery(query.query());
-
-	QNetworkRequest request(url);
-	QNetworkReply *reply = manager->get(request);
-	
-	connect(reply, SIGNAL(readyRead()), this, SLOT(handleJsonData));
+	// manager will automatically trigger `handleJsonData`, when finished
+	manager->get(QNetworkRequest(QUrl(JSON_DATA_HTTP_URL)));
 }
 
-void GHOApp::handleJsonData()
+void GHOApp::handleAuthenticationRequired(QNetworkReply *reply,
+	QAuthenticator *authenticator)
 {
 	qDebug() << "Hello there!";
+	authenticator->setUser(JSON_DATA_HTTP_USERNAME);
+	if (!password.isEmpty())
+		authenticator->setPassword(password);
+	else
+		qWarning() << "Warning: Et wurde keen Passwort jesetzt!";
+}
+
+void GHOApp::handleJsonData(QNetworkReply *reply)
+{
+	if (reply->error()) {
+		qDebug() << "Error: Et jibt 1 Problehm beem einwaehln:" << reply->errorString();
+		return;
+	} else {
+		qDebug() << "Yo, geil et jeht";
+		qDebug() << "Groesse der JSON Datei:" << reply->readAll().length() << "bytes";
+	}
 }

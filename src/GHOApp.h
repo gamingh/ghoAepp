@@ -22,9 +22,9 @@
 #define GHOAPP_H
 
 #include <QObject>
-#include <QNetworkReply>
 
-class QNetworkAccessManager;
+class QNetworkReply;
+class QAuthenticator;
 
 class GHOApp : public QObject
 {
@@ -37,10 +37,13 @@ public:
 	Q_INVOKABLE void downloadJson();
 
 protected slots:
-	void handleJsonData();
+	void handleAuthenticationRequired(QNetworkReply *reply,
+		QAuthenticator *authenticator);
+	void handleJsonData(QNetworkReply *reply);
 
 private:
 	QNetworkReply *reply;
+	QString password;
 };
 
 #endif // GHOAPP_H
