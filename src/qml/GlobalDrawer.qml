@@ -17,25 +17,33 @@
  *  along with GHO-Äpp. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.7
 import org.kde.kirigami 2.0 as Kirigami
-import QtQuick.Controls 2.0 as Controls
 
-Kirigami.ApplicationWindow {
-	id: root
-	width: 960
-	height: 540
-	
-	globalDrawer: GlobalDrawer {}
+Kirigami.GlobalDrawer {
+	id: globalDrawer
+	title: "GHO App"
+	bannerImageSource: ""
+	// make drawer floating (overlay)
+	modal: true
+	// start with closed drawer
+	drawerOpen: false
+	// show open button on the left side
+	handleVisible: true
 
-	header: Kirigami.ApplicationHeader {
-		preferredHeight: Kirigami.Units.gridUnit * 2.25
-	}
-
-	Component {id: vertretungsplanPage; VertretungsplanPage {}}
-	Component {id: testsPage; TestsPage {}}
-
-	Component.onCompleted: {
-		pageStack.push(vertretungsplanPage);
-	}
+	actions: [
+		Kirigami.Action {
+			text: qsTr("Vertretungsplan")
+			iconName: "korganizer"
+			onTriggered: {
+				pageStack.replace(vertretungsplanPage);
+			}
+		},
+		Kirigami.Action {
+			text: qsTr("Entwickler Tests")
+			iconName: "dialog-warning"
+			onTriggered: {
+				pageStack.replace(testsPage);
+			}
+		}
+	]
 }

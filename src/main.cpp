@@ -59,6 +59,13 @@ int main(int argc, char *argv[])
 	// QML-GUI
 	//
 
+	if (qgetenv("QT_QUICK_CONTROLS_STYLE").isEmpty()) {
+		qDebug() << "QT_QUICK_CONTROLS_STYLE not set, setting to Material";
+		qputenv("QT_QUICK_CONTROLS_STYLE", "Material");
+	}
+	qputenv("QT_QUICK_CONTROLS_1_STYLE", "Flat");
+
+
 	QQmlApplicationEngine engine;
 	engine.rootContext()->setContextProperty("ghoApp", &ghoApp);
 
