@@ -19,23 +19,46 @@
 
 import QtQuick 2.7
 import org.kde.kirigami 2.0 as Kirigami
-import QtQuick.Controls 2.0 as Controls
+import QtQuick.Controls 1.4 as ControlsOne
+import QtQuick.Controls.Styles 1.4
 
-Kirigami.ApplicationWindow {
-	id: root
-	width: 960
-	height: 540
-	
-	globalDrawer: GlobalDrawer {}
+Kirigami.Page {
+	leftPadding: 0
+	rightPadding: 0
+	bottomPadding: 0
+	topPadding: 0
 
-	header: Kirigami.ApplicationHeader {
-		preferredHeight: Kirigami.Units.gridUnit * 2.25
-	}
+	title: "Vertretungsplan"
 
-	Component {id: vertretungsplanPage; VertretungsplanPage {}}
-	Component {id: testsPage; TestsPage {}}
+	ControlsOne.TableView {
+		selectionMode: SelectionMode.NoSelection
 
-	Component.onCompleted: {
-		pageStack.push(vertretungsplanPage);
+		ControlsOne.TableViewColumn {
+			role: "lesson"
+			title: "Stunde"
+			width: 100
+		}
+		ControlsOne.TableViewColumn {
+			role: "group"
+			title: "Gruppe"
+			width: 200
+		}
+
+		anchors.fill: parent
+
+		model: ListModel {
+			ListElement {
+				lesson: "1"
+				group: "10.21"
+			}
+			ListElement {
+				lesson: "5"
+				group: "10.23"
+			}
+			ListElement {
+				lesson: "9"
+				group: "Ev. Religion 10"
+			}
+		}
 	}
 }

@@ -21,21 +21,17 @@ import QtQuick 2.7
 import org.kde.kirigami 2.0 as Kirigami
 import QtQuick.Controls 2.0 as Controls
 
-Kirigami.ApplicationWindow {
-	id: root
-	width: 960
-	height: 540
-	
-	globalDrawer: GlobalDrawer {}
+Kirigami.Page {
+	title: "Entwickler Tests"
 
-	header: Kirigami.ApplicationHeader {
-		preferredHeight: Kirigami.Units.gridUnit * 2.25
-	}
+	Column {
+		anchors.fill: parent
+		spacing: 4
 
-	Component {id: vertretungsplanPage; VertretungsplanPage {}}
-	Component {id: testsPage; TestsPage {}}
-
-	Component.onCompleted: {
-		pageStack.push(vertretungsplanPage);
+		Controls.Button {
+			visible: true
+			text: "Test Download"
+			onClicked: ghoApp.downloadJson();
+		}
 	}
 }
