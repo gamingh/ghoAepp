@@ -34,7 +34,7 @@
 #include <iostream>
 
 static const QString JSON_DATA_HTTP_URL("http://gamerbudebb.d.pboehm.de/gho/"
-					 "vertretungsplan-cells.json");
+					 "vertretungsplan.json");
 static const QString JSON_DATA_HTTP_USERNAME("ghoschueler");
 
 GHOApp::GHOApp(QObject *parent) : QObject(parent)
