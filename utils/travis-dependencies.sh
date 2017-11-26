@@ -5,8 +5,6 @@ echo "Fetching dependencies"
 echo "*****************************************"
 
 apt update
-
-apt update
 apt install cmake \
             build-essential \
             libqt5quick5 \
