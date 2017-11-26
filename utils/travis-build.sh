@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "*****************************************"
-echo "Building Kaidan binary"
+echo "Building ghoAepp binary"
 echo "*****************************************"
 
 mkdir ../build; cd ../build/
