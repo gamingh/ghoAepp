@@ -1,23 +1,26 @@
 /*
- *  Kaidan - A user-friendly XMPP client for every device!
- * 
+ *  GHO-Äpp - App to view the Vertretungsplan conviniently
+ *
  *  Copyright (C) 2017 LNJ <git@lnj.li>
- * 
- *  Kaidan is free software: you can redistribute it and/or modify
+ *  Copyright (C) 2017 JBBgameich <jbb.mail@gmx.de>
+ *
+ *  GHO-Äpp is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
- *  Kaidan is distributed in the hope that it will be useful,
+ *
+ *  GHO-Äpp is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
- *  along with Kaidan. If not, see <http://www.gnu.org/licenses/>.
+ *  along with GHO-Äpp. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "GHOApp.h"
+#include "VertPlanItem.h"
+#include "VertPlanModel.h"
 
 #include <QDebug>
 #include <QUrl>
@@ -31,8 +34,6 @@
 #include <QAuthenticator>
 #include <QSettings>
 
-#include <iostream>
-
 static const QString JSON_DATA_HTTP_URL("http://gamerbudebb.d.pboehm.de/gho/"
 					 "vertretungsplan.json");
 static const QString JSON_DATA_HTTP_USERNAME("ghoschueler");
@@ -42,6 +43,27 @@ GHOApp::GHOApp(QObject *parent) : QObject(parent)
 	// load settings (<= ~/.config/ghoaepp/ghoaepp.conf)
 	QSettings settings(APPLICATION_NAME, APPLICATION_NAME);
 	password = settings.value("auth/password").toString();
+
+	vertPlanModel = new VertPlanModel(this);
+	// FIXME: Remove and parse from JSON
+	vertPlanModel->addEntry(new VertPlanItem(
+		8, QString("10.24"), QString("Ku"), QString("F63"),
+		QString(""), QString(""), QString("Fällt aus")
+	));
+	vertPlanModel->addEntry(new VertPlanItem(
+		4, QString("07.13"), QString("Ge"), QString("B08"),
+		QString("Nowi"), QString(""), QString("")
+	));
+	vertPlanModel->addEntry(new VertPlanItem(
+		1, QString("09.1 Ma 0F01"), QString("Ma"), QString("B31"),
+		QString("MülD"), QString("Arbeitsauftrag"), QString("")
+	));
+	vertPlanModel->addEntry(new VertPlanItem(
+		1, QString("11.1"), QString("Ph"), QString("E08"),
+		QString(""), QString("Arbeitsauftrag"), QString("Fällt aus")
+	));
+
+	emit vertPlanModelChanged();
 }
 
 GHOApp::~GHOApp()
@@ -83,4 +105,9 @@ void GHOApp::handleJsonData(QNetworkReply *reply)
 		qDebug() << "Yo, geil et jeht";
 		qDebug() << "Groesse der JSON Datei:" << reply->readAll().length() << "bytes";
 	}
+}
+
+VertPlanModel* GHOApp::getVertPlanModel()
+{
+	return vertPlanModel;
 }

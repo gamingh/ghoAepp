@@ -2,6 +2,7 @@
  *  GHO-Äpp - App to view the Vertretungsplan conviniently
  *
  *  Copyright (C) 2017 JBBgameich <jbb.mail@gmx.de>
+ *  Copyright (C) 2017 LNJ <git@lnj.li>
  *
  *  GHO-Äpp is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,9 +18,9 @@
  *  along with GHO-Äpp. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.7
+import QtQuick 2.6
 import org.kde.kirigami 2.0 as Kirigami
-import QtQuick.Controls 1.4 as ControlsOne
+import QtQuick.Controls 1.4 as Controls1
 import QtQuick.Controls.Styles 1.4
 
 Kirigami.Page {
@@ -30,35 +31,46 @@ Kirigami.Page {
 
 	title: "Vertretungsplan"
 
-	ControlsOne.TableView {
-		selectionMode: SelectionMode.NoSelection
+	Controls1.TableView {
+		anchors.fill: parent
+		selectionMode: Controls1.SelectionMode.NoSelection
 
-		ControlsOne.TableViewColumn {
+		Controls1.TableViewColumn {
 			role: "lesson"
 			title: "Stunde"
+			width: 70
+		}
+		Controls1.TableViewColumn {
+			role: "course"
+			title: "Kurs"
 			width: 100
 		}
-		ControlsOne.TableViewColumn {
-			role: "group"
-			title: "Gruppe"
+		Controls1.TableViewColumn {
+			role: "subject"
+			title: "Fach"
+			width: 100
+		}
+		Controls1.TableViewColumn {
+			role: "room"
+			title: "Raum"
+			width: 100
+		}
+		Controls1.TableViewColumn {
+			role: "teacher"
+			title: "VLehrer"
+			width: 100
+		}
+		Controls1.TableViewColumn {
+			role: "notes"
+			title: "Info"
+			width: 200
+		}
+		Controls1.TableViewColumn {
+			role: "type"
+			title: "Art"
 			width: 200
 		}
 
-		anchors.fill: parent
-
-		model: ListModel {
-			ListElement {
-				lesson: "1"
-				group: "10.21"
-			}
-			ListElement {
-				lesson: "5"
-				group: "10.23"
-			}
-			ListElement {
-				lesson: "9"
-				group: "Ev. Religion 10"
-			}
-		}
+		model: ghoApp.vertPlanModel
 	}
 }

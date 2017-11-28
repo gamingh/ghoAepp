@@ -26,11 +26,14 @@
 #include <QQuickWindow>
 
 #include "GHOApp.h"
+#include "VertPlanModel.h"
 
 
 int main(int argc, char *argv[])
 {
 	qDebug() << "GHO-Äpp rocks!";
+	
+	qRegisterMetaType<VertPlanModel*>();
 	
 	//
 	// App
