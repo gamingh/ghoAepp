@@ -2,7 +2,6 @@
  *  GHO-Äpp - App to view the Vertretungsplan conviniently
  *
  *  Copyright (C) 2017 LNJ <git@lnj.li>
- *  Copyright (C) 2017 JBBgameich <jbb.mail@gmx.de>
  *
  *  GHO-Äpp is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,40 +17,19 @@
  *  along with GHO-Äpp. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GHOAPP_H
-#define GHOAPP_H
+#include "VertPlanItem.h"
 
-#include <QObject>
-#include <QQmlListProperty>
-
-class QNetworkReply;
-class QAuthenticator;
-class VertPlanModel;
-
-class GHOApp : public QObject
+VertPlanItem::VertPlanItem(QObject *parent) : QObject(parent)
 {
-	Q_OBJECT
-	Q_PROPERTY(VertPlanModel *vertPlanModel READ getVertPlanModel NOTIFY vertPlanModelChanged)
+}
 
-public:
-	GHOApp(QObject* parent = 0);
-	~GHOApp();
+VertPlanItem::VertPlanItem::VertPlanItem(unsigned int lesson, QString course,
+	QString subject, QString room, QString teacher, QString notes,
+	QString type, QObject *parent) : QObject(parent), lesson(lesson), course(course),
+	subject(subject), room(room), teacher(teacher), notes(notes), type(type)
+{
+}
 
-	Q_INVOKABLE void downloadJson();
-	VertPlanModel* getVertPlanModel();
-
-signals:
-	void vertPlanModelChanged();
-
-private slots:
-	void handleAuthenticationRequired(QNetworkReply *reply,
-		QAuthenticator *authenticator);
-	void handleJsonData(QNetworkReply *reply);
-
-private:
-	QNetworkReply *reply;
-	QString password;
-	VertPlanModel *vertPlanModel;
-};
-
-#endif // GHOAPP_H
+VertPlanItem::~VertPlanItem()
+{
+}
