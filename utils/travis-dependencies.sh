@@ -7,6 +7,7 @@ echo "*****************************************"
 apt update
 apt install cmake \
             build-essential \
+            ninja-build \
             libqt5quick5 \
             libqt5quickcontrols2-5 \
             libqt5quickwidgets5 \
