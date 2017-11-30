@@ -6,5 +6,5 @@ echo "*****************************************"
 
 mkdir ../build; cd ../build/
 
-cmake ..
-make -j$(nproc)
+cmake .. -GNinja
+cmake --build .
